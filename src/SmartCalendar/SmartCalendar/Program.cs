@@ -16,10 +16,8 @@ namespace SmartCalendar
 
     class Program
     {
-        // If modifying these scopes, delete your previously saved credentials
-        // at ~/.credentials/calendar-dotnet-quickstart.json
-        static string[] Scopes = { CalendarService.Scope.Calendar };
-        static string ApplicationName = "Google Calendar API .NET Quickstart";
+        static string[] scopes = { CalendarService.Scope.Calendar };
+        static string ApplicationName = "SmartCalendar";
 
         static void Main(string[] args)
         {
@@ -30,7 +28,7 @@ namespace SmartCalendar
                 string credPath = "token.json";
                 credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
                     GoogleClientSecrets.Load(stream).Secrets,
-                    Scopes,
+                    scopes,
                     "user",
                     CancellationToken.None,
                     new FileDataStore(credPath, true)).Result;
@@ -38,15 +36,20 @@ namespace SmartCalendar
             }
 
             // Create Google Calendar API service.
-            var service = new CalendarService(new BaseClientService.Initializer()
+            var service = new CalendarService(new BaseClientService.Initializer
             {
                 HttpClientInitializer = credential,
                 ApplicationName = ApplicationName,
             });
 
-            #region Meu evento
+            ListEvents(service);
 
-            Event myEvent = new Event
+            Console.Read();
+        }
+
+        public static void CreateEvent(CalendarService service)
+        {
+            Event newEvent = new Event
             {
                 Summary = "Daily Mobile 2",
                 //Location = "Um lugar qualquer",
@@ -72,10 +75,11 @@ namespace SmartCalendar
                 }
             };
 
-            Event recurringEvent = service.Events.Insert(myEvent, "primary").Execute();
+            Event recurringEvent = service.Events.Insert(newEvent, "primary").Execute();
+        }
 
-            #endregion
-
+        public static void ListEvents(CalendarService service)
+        {
             // Define parameters of request.
             EventsResource.ListRequest request = service.Events.List("primary");
             request.TimeMin = DateTime.Now;
@@ -106,8 +110,6 @@ namespace SmartCalendar
             {
                 Console.WriteLine("No upcoming events found.");
             }
-
-            Console.Read();
         }
     }
 }
