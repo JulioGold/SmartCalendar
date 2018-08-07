@@ -1,0 +1,16 @@
+{
+    "Summary": "Daily Mobile 2",
+    "Location": "No pátio",
+    "Recurrence": ["RRULE:FREQ=WEEKLY;UNTIL=20180817;BYDAY=MO,TU,WE,TH,FR"],
+    "Start": {
+        "DateTime": "2018-08-07T10:15:00Z",
+        "TimeZone": "America/Sao_Paulo"
+    },
+    "End": {
+        "DateTime": "2018-08-07T10:30:00Z",
+        "TimeZone": "America/Sao_Paulo"
+    },
+    "EventAttendee": [
+        { "Email": "jgoldschmidt@gvdasa.com.br", "Organizer": true, "DisplayName": "Julio" }
+    ]
+}

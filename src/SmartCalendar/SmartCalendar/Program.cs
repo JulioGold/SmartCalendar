@@ -3,6 +3,7 @@ using Google.Apis.Calendar.v3;
 using Google.Apis.Calendar.v3.Data;
 using Google.Apis.Services;
 using Google.Apis.Util.Store;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -42,17 +43,39 @@ namespace SmartCalendar
                 ApplicationName = ApplicationName,
             });
 
+            LoadConfigJson();
+
             ListEvents(service);
 
             Console.Read();
         }
 
-        public static void CreateEvent(CalendarService service)
+        public static void LoadConfigJson()
+        {
+            if (File.Exists("EventConfig.json"))
+            {
+                using (StreamReader streamReader = new StreamReader("EventConfig.json"))
+                {
+                    string json = streamReader.ReadToEnd();
+                    //EventConfig items = JsonConvert.DeserializeObject<EventConfig>(json);
+                    //Event items = JsonConvert.DeserializeObject<Event>(json, new JsonSerializerSettings { DateFormatString = "yyyy-MM-ddTH:mm:ss" });
+                    Event items = JsonConvert.DeserializeObject<Event>(json);
+                }
+            }
+            
+            //dynamic array = JsonConvert.DeserializeObject(json);
+            //foreach(var item in array)
+            //{
+            //    Console.WriteLine("{0} {1}", item.temp, item.vcc);
+            //}
+        }
+
+        public static void CreateEvent(CalendarService service, Event eventConfig)
         {
             Event newEvent = new Event
             {
-                Summary = "Daily Mobile 2",
-                //Location = "Um lugar qualquer",
+                Summary = eventConfig.Summary, //"Daily Mobile 2",
+                Location = eventConfig.Location, //"Um lugar qualquer",
                 Start = new EventDateTime
                 {
                     DateTime = new DateTime(2018, 8, 7, 10, 15, 0),
